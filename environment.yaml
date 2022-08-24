@@ -1,0 +1,12 @@
+name: cylc-8.0
+channels:
+    - conda-forge
+    - coecms
+dependencies:
+    - cylc-flow=8.0
+    - cylc-uiserver
+    - cylc-rose
+    - metomi-rose
+    - pyyaml
+    - mule
+

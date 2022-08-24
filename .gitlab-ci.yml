@@ -1,9 +1,8 @@
 build:
+    stage: build
     tags: [docker]
-    image: 
-        name: quay.io/singularity/singularity:v3.10.0
+    image:
+        name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
-    script: singularity build cylc-8.0.sif cylc-8.0.def
-    artifacts:
-        paths:
-            - cylc-8.0.sif
+    script:
+        - /kaniko/executor --context "${CI_PROJECT_DIR}" --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
