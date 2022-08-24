@@ -1,0 +1,7 @@
+Bootstrap: docker
+From: continuumio/miniconda3
+
+%post
+    conda update -c conda-forge all
+    conda install -c conda-forge cylc-flow=8.0
+    conda clean --all
