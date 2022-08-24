@@ -1,6 +1,6 @@
 build:
     tags: [docker]
-    image: quay.io/singularity/singularity
+    image: quay.io/singularity/singularity:v3.10.0-slim
     script: singularity build cylc-8.0.sif cylc-8.0.def
     artifacts:
         paths:
