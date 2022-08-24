@@ -5,4 +5,4 @@ build:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
     script:
-        - /kaniko/executor --context "${CI_PROJECT_DIR}" --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+        - /kaniko/executor --context "${CI_PROJECT_DIR}" --dockerfile "${CI_PROJECT_DIR}/Dockerfile" --no-push
