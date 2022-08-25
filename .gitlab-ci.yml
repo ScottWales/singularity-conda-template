@@ -22,10 +22,16 @@ singularity:
     stage: singularity
     tags: [docker]
     image:
-        name: quay.io/singularity/singularity
+        name: quay.io/singularity/singularity:3.10.2
         entrypoint: [""]
     script:
-        singularity build "${OUTDIR}/image.sif" "${OUTDIR}/image.tar"
+        - singularity build "${OUTDIR}/image.sif" "${OUTDIR}/image.tar"
+
+install:
+    stage: install
+    tags: [gadi]
+    script:
+        - scp gitlab-runner:${OUTDIR}/image.sif .
 
 clean:
     stage: clean
