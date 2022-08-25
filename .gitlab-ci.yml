@@ -23,7 +23,7 @@ singularity:
     stage: singularity
     tags: [docker]
     image:
-        name: quay.io/singularity/singularity:3.10.2
+        name: quay.io/singularity/singularity:v3.10.2
         entrypoint: [""]
     script:
         - singularity build "${OUTDIR}/image.sif" "${OUTDIR}/image.tar"
