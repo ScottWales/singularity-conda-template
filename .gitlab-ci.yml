@@ -1,6 +1,7 @@
 stages:
     - docker
     - singularity
+    - install
     - clean
 
 variables:
@@ -32,9 +33,10 @@ install:
     tags: [gadi]
     script:
         - scp gitlab-runner:${OUTDIR}/image.sif .
+    when: never
 
 clean:
     stage: clean
     tags: [docker]
     script: rm -rv "${OUTDIR}"
-    when: always
+    when: never
