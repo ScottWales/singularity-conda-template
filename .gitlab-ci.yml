@@ -26,7 +26,7 @@ singularity:
         name: quay.io/singularity/singularity:v3.10.2
         entrypoint: [""]
     script:
-        - singularity build "${OUTDIR}/image.sif" "${OUTDIR}/image.tar"
+        - singularity build "${OUTDIR}/image.sif" "docker-archive://${OUTDIR}/image.tar"
 
           # install:
           #     stage: install
