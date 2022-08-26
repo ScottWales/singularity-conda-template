@@ -4,14 +4,16 @@ set name    "_NAME_"
 set version "_VERSION_"
 set repo    "_REPO_"
 set date    "_DATE_"
+set sha     "_SHA_"
 set appdir  "_APPDIR_"
 
 proc ModulesHelp { } {
+    global name version repo sha date
     puts stderr "$name/$version"
-    puts stderr "    Installed from:"
+    puts stderr "  Installed from:"
     puts stderr "    $repo"
     puts stderr "      commit: $sha"
-    puts stderr "      at: $date"
+    puts stderr "      at:     $date"
 }
 
 prepend-path PATH "$appdir/bin"
