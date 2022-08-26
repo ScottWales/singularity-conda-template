@@ -33,7 +33,7 @@ rm -f $APPDIR/bin/*
 COMMANDS=$(/opt/singularity/bin/singularity exec $APPDIR/etc/image.sif ls /opt/conda/bin)
 
 # or limited commands
-COMMANDS="cylc rose rosa rosie"
+# COMMANDS="cylc rose rosa rosie"
 
 for f in $COMMANDS; do
     ln -sf "$APPDIR/etc/run-image-command.sh" "$APPDIR/bin/$(basename $f)"

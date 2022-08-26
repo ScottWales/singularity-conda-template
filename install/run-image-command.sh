@@ -9,4 +9,6 @@ set -o pipefail
 export PYTHONNOUSERSITE=1
 export PYTHONPATH=""
 
-/opt/singularity/bin/singularity exec ./image.sif "/opt/conda/bin/$(basename $0)" "$@"
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+
+/opt/singularity/bin/singularity exec --env "PATH=/opt/conda/bin:$PATH" $SCRIPT_DIR/image.sif "/opt/conda/bin/$(basename $0)" "$@"
