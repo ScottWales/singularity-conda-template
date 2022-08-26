@@ -28,14 +28,15 @@ singularity:
     script:
         - singularity build "${OUTDIR}/image.sif" "docker-archive://${OUTDIR}/image.tar"
 
-          # install:
-          #     stage: install
-          #     tags: [gadi]
-          #     script:
-          #         - scp gitlab-runner:${OUTDIR}/image.sif .
-          # 
-          # clean:
-          #     stage: clean
-          #     tags: [docker]
-          #     script: rm -rv "${OUTDIR}"
-          #     when: always
+# install gadi:
+#     stage: install
+#     tags: [gadi]
+#     script:
+#         - scp gitlab-runner:${OUTDIR}/image.sif .
+#         - install/install-gadi.sh
+
+clean:
+    stage: clean
+    tags: [docker]
+    script: rm -rv "${OUTDIR}"
+    when: always

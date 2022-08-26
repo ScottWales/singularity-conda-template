@@ -1,0 +1,17 @@
+#%Module1.0
+
+set name    "_NAME_"
+set version "_VERSION_"
+set repo    "_REPO_"
+set date    "_DATE_"
+set appdir  "_APPDIR_"
+
+proc ModulesHelp { } {
+    puts stderr "$name/$version"
+    puts stderr "    Installed from:"
+    puts stderr "    $repo"
+    puts stderr "      commit: $sha"
+    puts stderr "      at: $date"
+}
+
+prepend-path PATH "$appdir/bin"
