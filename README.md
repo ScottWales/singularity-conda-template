@@ -1,8 +1,10 @@
-varpytools
-==========
+Demo Singularity Conda environment
+==================================
 
 General Singularity instructions
 --------------------------------
+
+Copy this repository and upload to https://gitlab.nci.org.au/bom/ngm to be able to use gitlab-ci
 
 Modules are installed under /g/data/access/ngm
 
@@ -27,3 +29,7 @@ Stages:
  3. install:
     Copies the singularity image to gadi and then runs install/install-gadi.sh
     * See the **install** directory for files installed *outside* the image
+
+The Singularity image itself is 'etc/image.slf' under the install directory.
+This can be copied to other sites, the Conda environment on the image is stored
+in `/opt/conda`.
