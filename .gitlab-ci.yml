@@ -5,7 +5,10 @@ stages:
     - clean
 
 variables:
+    # # SETUP: Set a different module name if desired
+    # NAME: "my-conda-env"
     OUTDIR: "/scratch/gitlab-runner/${CI_PROJECT_PATH}/${CI_COMMIT_SHA}"
+    PREFIX: "/g/data/access/ngm"
 
 docker:
     stage: docker
