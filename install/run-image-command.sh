@@ -6,6 +6,7 @@ set -eu
 set -o pipefail
 
 # Only use libraries inside the image
+# SETUP: Comment out to allow user libraries
 export PYTHONNOUSERSITE=1
 export PYTHONPATH=""
 

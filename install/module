@@ -16,4 +16,9 @@ proc ModulesHelp { } {
     puts stderr "      at:     $date"
 }
 
+set name_upcase [string toupper [string map {- _} $name]]
+
+setenv ${name_upcase}_ROOT "$appdir"
+setenv ${name_upcase}_VERSION "$version"
+
 prepend-path PATH "$appdir/bin"

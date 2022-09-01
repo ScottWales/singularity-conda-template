@@ -5,8 +5,8 @@ set -eu
 module purge
 
 : ${PREFIX:=/scratch/$PROJECT/$USER/ngm}
+: ${NAME:=$(basename $PWD)}
 
-NAME=$(basename $PWD)
 VERSION=$(git symbolic-ref --short HEAD)
 REPO=$(git remote get-url origin)
 SHA=$(git rev-parse HEAD)
@@ -29,9 +29,9 @@ cp install/run-image-command.sh $APPDIR/etc
 mkdir -p $APPDIR/bin
 rm -f $APPDIR/bin/*
 
+# SETUP: What commands should be made available?
 # All commands
 COMMANDS=$(/opt/singularity/bin/singularity exec $APPDIR/etc/image.sif ls /opt/conda/bin)
-
 # or limited commands
 # COMMANDS="cylc rose rosa rosie"
 
