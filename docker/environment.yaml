@@ -1,0 +1,6 @@
+# SETUP: Describe your Conda environment 
+name: python
+channels:
+  - conda-forge
+dependencies:
+  - python
