@@ -53,7 +53,7 @@ clean after delay:
     tags: [docker]
     script: rm -rv "${OUTDIR}"
     when: delayed
-    start in: 1 day
+    start_in: 1 day
 
 clean after failure:
     stage: clean
