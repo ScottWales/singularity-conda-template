@@ -7,8 +7,8 @@ module purge
 : ${PREFIX:=/scratch/$PROJECT/$USER/ngm}
 : ${NAME:=$(basename $PWD)}
 
-VERSION=$(git symbolic-ref --short HEAD)
-REPO=$(git remote get-url origin)
+VERSION=${CI_COMMIT_BRANCH:-$(git symbolic-ref --short HEAD)}
+REPO=${CI_PROJECT_URL:-$(git remote get-url origin)}
 SHA=$(git rev-parse HEAD)
 DATE=$(date --iso-8601=minutes)
 
