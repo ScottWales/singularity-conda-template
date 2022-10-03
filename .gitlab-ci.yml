@@ -48,8 +48,15 @@ install gadi prod:
         PREFIX: "/g/data/access/ngm"
     when: manual
 
-clean:
+clean after delay:
     stage: clean
     tags: [docker]
     script: rm -rv "${OUTDIR}"
-    when: always
+    when: delayed
+    start in: 1 day
+
+clean after failure:
+    stage: clean
+    tags: [docker]
+    script: rm -rv "${OUTDIR}"
+    when: on_failure
