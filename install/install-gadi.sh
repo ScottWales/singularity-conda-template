@@ -36,7 +36,7 @@ COMMANDS=$(/opt/singularity/bin/singularity exec $APPDIR/etc/image.sif ls /opt/c
 # COMMANDS="cylc rose rosa rosie"
 
 for f in $COMMANDS; do
-    ln -sf "$APPDIR/etc/run-image-command.sh" "$APPDIR/bin/$(basename $f)"
+    ln -sf "../etc/run-image-command.sh" "$APPDIR/bin/$(basename $f)"
 done
 
 # Create module
