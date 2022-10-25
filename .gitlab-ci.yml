@@ -1,14 +1,14 @@
 stages:
     - docker
     - singularity
-    - install
+    - install staging
+    - install production
     - clean
 
 variables:
     # # SETUP: Set a different module name if desired
     # NAME: "my-conda-env"
     OUTDIR: "/scratch/gitlab-runner/${CI_PROJECT_PATH}/${CI_COMMIT_SHA}"
-    PREFIX: "/g/data/access/ngm"
 
 docker:
     stage: docker
@@ -31,15 +31,32 @@ singularity:
     script:
         - singularity build "${OUTDIR}/image.sif" "docker-archive://${OUTDIR}/image.tar"
 
-install gadi:
-    stage: install
+install gadi staging:
+    stage: install staging
     tags: [gadi]
     script:
         - scp gitlab-runner:${OUTDIR}/image.sif .
-        # - install/install-gadi.sh
+        - install/install-gadi.sh
 
-clean:
+install gadi prod:
+    stage: install production
+    tags: [gadi]
+    script:
+        - scp gitlab-runner:${OUTDIR}/image.sif .
+        - install/install-gadi.sh
+    variables:
+        PREFIX: "/g/data/access/ngm"
+    when: manual
+
+clean after delay:
     stage: clean
     tags: [docker]
     script: rm -rv "${OUTDIR}"
-    when: always
+    when: delayed
+    start_in: 1 day
+
+clean after failure:
+    stage: clean
+    tags: [docker]
+    script: rm -rv "${OUTDIR}"
+    when: on_failure
