@@ -4,7 +4,13 @@ Demo Singularity Conda environment
 General Singularity instructions
 --------------------------------
 
-Copy this repository and upload to https://gitlab.nci.org.au/bom/ngm to be able to use gitlab-ci
+Copy this repository and upload to https://gitlab.nci.org.au/bom/ngm to be able to use gitlab-ci, e.g.
+
+    git clone git@git.nci.org.au:bom/ngm/modules/singularity-conda-template MYENV
+    cd MYENV
+    git push --set-upstream git@git.nci.org.au:bom/ngm/modules/MYENV master
+
+See https://git.nci.org.au/bom/ngm/documentation/-/wikis/User-Guides/Conda-Environments for detailled instructions
 
 Modules are installed under /g/data/access/ngm
 
