@@ -13,4 +13,4 @@ export PYTHONPATH=""
 SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
 
 module load singularity
-singularity exec --bind /half-root --env "PATH=/opt/conda/bin:$PATH" $SCRIPT_DIR/image.sif "/opt/conda/bin/$(basename $0)" "$@"
+singularity exec --bind /half-root $SCRIPT_DIR/image.sif "$SCRIPT_DIR/entrypoint.sh" "/opt/conda/bin/$(basename $0)" "$@"
