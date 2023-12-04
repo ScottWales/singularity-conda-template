@@ -4,3 +4,6 @@ channels:
   - conda-forge
 dependencies:
   - python
+  - conda
+  - conda-build
+  - conda-verify

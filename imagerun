@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+
+CMD=$(basename $0)
+if [ "$CMD" != "imagerun" ]; then
+    ARGS=("$CMD" "$@")
+else
+    ARGS=("$@")
+fi
+
+/opt/singularity/bin/singularity run ${SCRIPT_DIR}/../etc/image.sif "${ARGS[@]}"
