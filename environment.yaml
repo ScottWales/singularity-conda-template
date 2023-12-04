@@ -7,3 +7,5 @@ dependencies:
   - conda
   - conda-build
   - conda-verify
+  - conda-pack
+  - squashfs-tools

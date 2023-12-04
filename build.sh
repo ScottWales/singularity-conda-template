@@ -2,28 +2,39 @@
 #  Copyright 2023 Bureau of Meteorology
 #  Author Scott Wales
 
-#PBS -l copyq
+#PBS -q copyq
 #PBS -l ncpus=1
 #PBS -l walltime=1:00:00
 #PBS -l mem=4gb
 #PBS -l jobfs=20gb
 #PBS -l wd
+#PBS -j oe
+#PBS -o build.log
 
 set -eu
 set -o pipefail
 
 SCRIPT_DIR=${PBS_O_WORKDIR:-$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )}
 
+# Module name
 NAME=conda
+
+# Module version
 VERSION=202312
+
+# Commands to expose to the user
 COMMANDS="python conda"
 
-WORKDIR=${TMPDIR}/squash
+# Install directory
 STAGEDIR=/scratch/$PROJECT/$USER/ngm
 
+# Scratch directory
+WORKDIR=${TMPDIR}/squash
 mkdir -p "$WORKDIR"
 
-PATH=/scratch/hc46/saw562/tmp/container/bom-ngm-conda/bin:$PATH
+# Load conda
+module use /scratch/$PROJECT/$USER/ngm/modules
+module load conda
 
 # Set up the conda environment
 if ! [ -d $WORKDIR/conda ]; then
@@ -39,7 +50,7 @@ fi
 cp $SCRIPT_DIR/base.sif $WORKDIR/image.sif
 
 # Add in conda squashfs to this container
-singularity sif add \
+/opt/singularity/bin/singularity sif add \
     --datatype 4 \
     --partfs 1 \
     --parttype 4 \
@@ -72,4 +83,24 @@ set prefix "$STAGEDIR/apps/$NAME/$VERSION"
 set git "$(cd $SCRIPT_DIR; git describe --tags)"
 
 prepend-path PATH "\$prefix/bin"
+EOF
+
+cat <<EOF
+
+$NAME-$VERSION installed
+
+Load with
+    module use $STAGEDIR/modules
+    module load $NAME/$VERSION
+
+Aliases call that command in the container:
+
+EOF
+
+ls $STAGEDIR/apps/$NAME/$VERSION/bin
+
+cat <<EOF
+
+Run an arbitrary command in the container with
+    imagerun CMD
 EOF
