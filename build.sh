@@ -25,18 +25,20 @@ mkdir -p "$WORKDIR"
 
 PATH=/scratch/hc46/saw562/tmp/container/bom-ngm-conda/bin:$PATH
 
-if ! [ -d $WORKDIR/mamba ]; then
-    conda env create --prefix $WORKDIR/mamba --file $SCRIPT_DIR/environment.yaml
+# Set up the conda environment
+if ! [ -d $WORKDIR/conda ]; then
+    conda env create --prefix $WORKDIR/conda --file $SCRIPT_DIR/environment.yaml
 fi
 
+# Pack the conda environment into squashfs
 if ! [ -f "$WORKDIR/conda.squashfs" ]; then
-    conda pack --prefix $WORKDIR/mamba --arcroot bom-ngm/mamba --output $WORKDIR/conda.squashfs --compress-level 0
+    conda pack --prefix $WORKDIR/conda --arcroot bom-ngm/conda --output $WORKDIR/conda.squashfs --compress-level 0
 fi
 
-# Make a copy for this container
+# Make a copy of the base image for this container
 cp $SCRIPT_DIR/base.sif $WORKDIR/image.sif
 
-# Add in conda
+# Add in conda squashfs to this container
 singularity sif add \
     --datatype 4 \
     --partfs 1 \
@@ -46,14 +48,28 @@ singularity sif add \
     $WORKDIR/image.sif \
     $WORKDIR/conda.squashfs
 
-# Stage
+# Stage the image
 mkdir -p $STAGEDIR/apps/$NAME/$VERSION/etc
 cp $WORKDIR/image.sif $STAGEDIR/apps/$NAME/$VERSION/etc/$NAME-$VERSION.sif
 ln -sf $NAME-$VERSION.sif $STAGEDIR/apps/$NAME/$VERSION/etc/image.sif
 
+# Stage commands
 rm -rf $STAGEDIR/apps/$NAME/$VERSION/bin
 mkdir -p $STAGEDIR/apps/$NAME/$VERSION/bin
 cp imagerun $STAGEDIR/apps/$NAME/$VERSION/bin
 for c in $COMMANDS; do
     ln -s imagerun $STAGEDIR/apps/$NAME/$VERSION/bin/$c
 done
+
+# Stage module
+mkdir -p $STAGEDIR/modules/$NAME
+cat > $STAGEDIR/modules/$NAME/$VERSION <<EOF
+#%Module1.0
+
+set name "$NAME"
+set version "$VERSION"
+set prefix "$STAGEDIR/apps/$NAME/$VERSION"
+set git "$(cd $SCRIPT_DIR; git describe --tags)"
+
+prepend-path PATH \$prefix
+EOF
