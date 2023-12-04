@@ -71,5 +71,5 @@ set version "$VERSION"
 set prefix "$STAGEDIR/apps/$NAME/$VERSION"
 set git "$(cd $SCRIPT_DIR; git describe --tags)"
 
-prepend-path PATH \$prefix
+prepend-path PATH "\$prefix/bin"
 EOF
