@@ -1,1 +1,2 @@
-base.sif
+.*.sw?
+*.log
