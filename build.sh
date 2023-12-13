@@ -14,6 +14,8 @@
 set -eu
 set -o pipefail
 
+set -x
+
 exec > build.log
 exec 2>&1
 
