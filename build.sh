@@ -42,7 +42,7 @@ export MAMBA_ROOT_PREFIX=$WORKDIR/micromamba
 export PATH=$MAMBA_ROOT_PREFIX/bin:$WORKDIR/bin:$PATH
 
 curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C "$WORKDIR" bin/micromamba 
-micromamba create -n base -f base.yaml
+micromamba create -n base -c conda-forge conda-pack squashfs-tools
 
 # Set up the conda environment
 if ! [ -d $WORKDIR/conda ]; then
