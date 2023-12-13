@@ -60,14 +60,14 @@ fi
 cp $SCRIPT_DIR/base.sif $WORKDIR/image.sif
 
 # Add in conda squashfs to this container
-#/opt/singularity/bin/singularity sif add \
-#    --datatype 4 \
-#    --partfs 1 \
-#    --parttype 4 \
-#    --partarch 2 \
-#    --groupid 1 \
-#    $WORKDIR/image.sif \
-#    $WORKDIR/conda.squashfs
+/opt/singularity/bin/singularity sif add \
+    --datatype 4 \
+    --partfs 1 \
+    --parttype 4 \
+    --partarch 2 \
+    --groupid 1 \
+    $WORKDIR/image.sif \
+    $WORKDIR/conda.squashfs
 
 # Stage the image
 mkdir -p $STAGEDIR/apps/$NAME/$VERSION/etc
