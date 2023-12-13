@@ -7,6 +7,11 @@ if [ "$CMD" != "imagerun" ]; then
     ARGS=("$CMD" "$@")
 else
     ARGS=("$@")
+
+    if [ "$1" == "shell" ]; then
+        /opt/singularity/bin/singularity shell ${SCRIPT_DIR}/../etc/image.sif
+        exit "$?"
+    fi
 fi
 
 /opt/singularity/bin/singularity run ${SCRIPT_DIR}/../etc/image.sif "${ARGS[@]}"

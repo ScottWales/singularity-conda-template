@@ -9,18 +9,21 @@
 #PBS -l jobfs=20gb
 #PBS -l wd
 #PBS -j oe
-#PBS -o build.log
+#PBS -o pbs.log
 
 set -eu
 set -o pipefail
 
+exec > build.log
+exec 2>&1
+
 SCRIPT_DIR=${PBS_O_WORKDIR:-$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )}
 
 # Module name
-NAME=conda
+: ${NAME:=conda}
 
 # Module version
-VERSION=202312
+: ${VERSION:=test}
 
 # Commands to expose to the user
 COMMANDS="python conda"
@@ -29,21 +32,26 @@ COMMANDS="python conda"
 STAGEDIR=/scratch/$PROJECT/$USER/ngm
 
 # Scratch directory
-WORKDIR=${TMPDIR}/squash
+WORKDIR="${TMPDIR}/squash"
 mkdir -p "$WORKDIR"
 
-# Load conda
-module use /scratch/$PROJECT/$USER/ngm/modules
-module load conda
+# Create base
+export CONDA_PKGS_DIRS=$WORKDIR/pkgs
+export MAMBA_ROOT_PREFIX=$WORKDIR/micromamba
+
+export PATH=$MAMBA_ROOT_PREFIX/bin:$WORKDIR/bin:$PATH
+
+curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C "$WORKDIR" bin/micromamba 
+micromamba create -n base -f base.yaml
 
 # Set up the conda environment
 if ! [ -d $WORKDIR/conda ]; then
-    conda env create --prefix $WORKDIR/conda --file $SCRIPT_DIR/environment.yaml
+    micromamba create --prefix $WORKDIR/conda --file $SCRIPT_DIR/environment.yaml
 fi
 
 # Pack the conda environment into squashfs
 if ! [ -f "$WORKDIR/conda.squashfs" ]; then
-    conda pack --prefix $WORKDIR/conda --arcroot bom-ngm/conda --output $WORKDIR/conda.squashfs --compress-level 0
+    conda-pack --prefix $WORKDIR/conda --arcroot bom-ngm/conda --output $WORKDIR/conda.squashfs --compress-level 0
 fi
 
 # Make a copy of the base image for this container
@@ -86,6 +94,7 @@ prepend-path PATH "\$prefix/bin"
 EOF
 
 cat <<EOF
+================================================================================
 
 $NAME-$VERSION installed
 
@@ -103,4 +112,7 @@ cat <<EOF
 
 Run an arbitrary command in the container with
     imagerun CMD
+
+Start a shell in the container with
+    imagerun shell
 EOF
