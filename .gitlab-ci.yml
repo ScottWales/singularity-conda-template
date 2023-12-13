@@ -13,4 +13,4 @@ create image:
     stage: build
     tags: [gadi]
     script:
-        - qsub -W block=true build.sh
+        - submit.sh
