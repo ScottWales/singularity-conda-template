@@ -13,4 +13,4 @@ create image:
     stage: build
     tags: [gadi]
     script:
-        - submit.sh
+        - ./submit.sh
