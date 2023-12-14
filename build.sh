@@ -23,10 +23,10 @@ exec 2>&1
 SCRIPT_DIR=${PBS_O_WORKDIR:-$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )}
 
 # Module name
-: ${NAME:=conda}
+: ${NAME:=$(basename $SCRIPT_DIR)}
 
 # Module version
-: ${VERSION:=test}
+: ${VERSION:=$(git rev-parse --abbrev-ref HEAD)}
 
 # Commands to expose to the user
 COMMANDS="python conda"
