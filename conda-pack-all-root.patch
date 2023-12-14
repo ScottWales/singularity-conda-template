@@ -1,0 +1,20 @@
+Only in b: .formats.py.swp
+diff -u a/formats.py b/formats.py
+--- a/formats.py	2023-12-13 15:38:51.536511000 +1100
++++ b/formats.py	2023-12-14 13:26:34.855459000 +1100
+@@ -392,6 +392,7 @@
+         """
+         After building the staging directory, squash it into file
+         """
++        os.chmod(self._staging_dir, mode=0o755)
+         cmd = [
+             "mksquashfs",
+             self._staging_dir,
+@@ -400,6 +401,7 @@
+             "-processors",
+             str(self.n_threads),
+             "-quiet",  # will still display native progressbar
++            "-all-root",
+         ]
+ 
+         if self.compress_level == 0:

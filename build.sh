@@ -10,6 +10,7 @@
 #PBS -l wd
 #PBS -j oe
 #PBS -o pbs.log
+#PBS -W umask=0022
 
 set -eu
 set -o pipefail
@@ -46,6 +47,9 @@ export PATH=$MAMBA_ROOT_PREFIX/bin:$WORKDIR/bin:$PATH
 curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C "$WORKDIR" bin/micromamba 
 micromamba create -n base -c conda-forge conda-pack squashfs-tools
 
+# Patch conda-pack
+patch --strip 1 --directory $MAMBA_ROOT_PREFIX/lib/python3.1?/site-packages/conda_pack < conda-pack-all-root.patch
+
 # Set up the conda environment
 if ! [ -d $WORKDIR/conda ]; then
     micromamba create --prefix $WORKDIR/conda --file $SCRIPT_DIR/environment.yaml
@@ -68,6 +72,8 @@ cp $SCRIPT_DIR/base.sif $WORKDIR/image.sif
     --groupid 1 \
     $WORKDIR/image.sif \
     $WORKDIR/conda.squashfs
+
+cp $WORKDIR/conda.squashfs $SCRIPT_DIR
 
 # Stage the image
 mkdir -p $STAGEDIR/apps/$NAME/$VERSION/etc
