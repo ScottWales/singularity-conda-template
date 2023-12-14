@@ -4,7 +4,12 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
 
+export SINGULARITYENV_APPEND_PATH=$PATH
+export SINGULARITYENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib64:/lib:/half-root/lib64:/half-root/lib
+export SINGULARITY_BIND=/half-root,/opt/pbs,/etc/pbs.conf,/var/run/munge
+
 CMD=$(basename $0)
+
 if [ "$CMD" != "imagerun" ]; then
     ARGS=("$CMD" "$@")
 else
