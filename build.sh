@@ -61,7 +61,7 @@ if ! [ -f "$WORKDIR/conda.squashfs" ]; then
 fi
 
 # Make a copy of the base image for this container
-cp $SCRIPT_DIR/base.sif $WORKDIR/image.sif
+cp $SCRIPT_DIR/base/base.sif $WORKDIR/image.sif
 
 # Add in conda squashfs to this container
 /opt/singularity/bin/singularity sif add \
@@ -73,8 +73,6 @@ cp $SCRIPT_DIR/base.sif $WORKDIR/image.sif
     $WORKDIR/image.sif \
     $WORKDIR/conda.squashfs
 
-cp $WORKDIR/conda.squashfs $SCRIPT_DIR
-
 # Stage the image
 mkdir -p $STAGEDIR/apps/$NAME/$VERSION/etc
 cp $WORKDIR/image.sif $STAGEDIR/apps/$NAME/$VERSION/etc/$NAME-$VERSION.sif
@@ -83,7 +81,7 @@ ln -sf $NAME-$VERSION.sif $STAGEDIR/apps/$NAME/$VERSION/etc/image.sif
 # Stage commands
 rm -rf $STAGEDIR/apps/$NAME/$VERSION/bin
 mkdir -p $STAGEDIR/apps/$NAME/$VERSION/bin
-cp imagerun $STAGEDIR/apps/$NAME/$VERSION/bin
+cp $SCRIPT_DIR/install/imagerun $STAGEDIR/apps/$NAME/$VERSION/bin
 for c in $COMMANDS; do
     ln -s imagerun $STAGEDIR/apps/$NAME/$VERSION/bin/$c
 done
