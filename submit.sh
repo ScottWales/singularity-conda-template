@@ -9,7 +9,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev
 
 rm -f build.log
 
-qsub -W block=true build.sh &
+qsub -P $PROJECT -V -W block=true build.sh &
 QID=$!
 
 tail -F build.log --pid=$QID &
