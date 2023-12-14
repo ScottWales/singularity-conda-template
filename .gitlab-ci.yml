@@ -1,62 +1,16 @@
 stages:
-    - docker
-    - singularity
+    - build
     - install staging
     - install production
     - clean
 
 variables:
-    # # SETUP: Set a different module name if desired
-    # NAME: "my-conda-env"
-    OUTDIR: "/scratch/gitlab-runner/${CI_PROJECT_PATH}/${CI_COMMIT_SHA}"
+    # SETUP: Set a different module name if desired
+    NAME: "$CI_PROJECT_NAME"
+    VERSION: "$CI_COMMIT_REF_NAME"
 
-docker:
-    stage: docker
-    tags: [docker]
-    image:
-        name: gcr.io/kaniko-project/executor:debug
-        entrypoint: [""]
-    script:
-        - mkdir -p /kaniko/.docker
-        - mkdir -p ${OUTDIR}
-        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"auth\":\"$(printf "%s:%s" ${CI_DEPENDENCY_PROXY_USER} "${CI_DEPENDENCY_PROXY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-        - /kaniko/executor --context "${CI_PROJECT_DIR}" --dockerfile "${CI_PROJECT_DIR}/docker/Dockerfile" --no-push --tarPath="${OUTDIR}/image.tar" --destination=image --compressed-caching=false
-
-singularity:
-    stage: singularity
-    tags: [docker]
-    image:
-        name: quay.io/singularity/singularity:v3.10.2
-        entrypoint: [""]
-    script:
-        - singularity build "${OUTDIR}/image.sif" "docker-archive://${OUTDIR}/image.tar"
-
-install gadi staging:
-    stage: install staging
+create image:
+    stage: build
     tags: [gadi]
     script:
-        - scp gitlab-runner:${OUTDIR}/image.sif .
-        - install/install-gadi.sh
-
-install gadi prod:
-    stage: install production
-    tags: [gadi]
-    script:
-        - scp gitlab-runner:${OUTDIR}/image.sif .
-        - install/install-gadi.sh
-    variables:
-        PREFIX: "/g/data/access/ngm"
-    when: manual
-
-clean after delay:
-    stage: clean
-    tags: [docker]
-    script: rm -rv "${OUTDIR}"
-    when: delayed
-    start_in: 1 day
-
-clean after failure:
-    stage: clean
-    tags: [docker]
-    script: rm -rv "${OUTDIR}"
-    when: on_failure
+        - ./submit.sh

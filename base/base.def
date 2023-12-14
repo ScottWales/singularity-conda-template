@@ -1,0 +1,6 @@
+Bootstrap: docker
+From: rockylinux:8-minimal
+
+%runscript
+	source /bom-ngm/conda/bin/activate
+	exec "$@"

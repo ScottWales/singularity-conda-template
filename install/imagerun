@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Runs a command in the container
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "$(readlink -f ${BASH_SOURCE[0]})" )" &> /dev/null && pwd )
+
+CMD=$(basename $0)
+if [ "$CMD" != "imagerun" ]; then
+    ARGS=("$CMD" "$@")
+else
+    ARGS=("$@")
+
+    if [ "$1" == "shell" ]; then
+        /opt/singularity/bin/singularity shell ${SCRIPT_DIR}/../etc/image.sif
+        exit "$?"
+    fi
+fi
+
+/opt/singularity/bin/singularity run ${SCRIPT_DIR}/../etc/image.sif "${ARGS[@]}"
