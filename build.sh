@@ -48,7 +48,7 @@ curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C "$W
 micromamba create -n base -c conda-forge conda-pack squashfs-tools
 
 # Patch conda-pack
-patch --strip 1 --directory $MAMBA_ROOT_PREFIX/lib/python3.1?/site-packages/conda_pack < conda-pack-all-root.patch
+patch --strip 1 --directory $MAMBA_ROOT_PREFIX/lib/python3.1?/site-packages/conda_pack < $SCRIPT_DIR/base/conda-pack-all-root.patch
 
 # Set up the conda environment
 if ! [ -d $WORKDIR/conda ]; then
